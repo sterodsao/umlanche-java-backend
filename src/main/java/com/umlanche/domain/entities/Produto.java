@@ -2,6 +2,7 @@ package com.umlanche.domain.entities;
 
 import com.umlanche.domain.dtos.ProdutoDto;
 
+import java.time.Duration;
 import java.util.Date;
 
 public class Produto {
@@ -46,5 +47,8 @@ public class Produto {
 
     public Date getDhCriacao() {
         return this.dhCriacao;
+    }
+    public boolean getEhNovidade() {
+        return Duration.between(new Date().toInstant(), this.dhCriacao.toInstant()).toDays() < 5;
     }
 }

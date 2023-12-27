@@ -10,6 +10,7 @@ public class ProdutoDto {
     public String dsResumo;
     public double vlPreco;
     public Date dhCriacao;
+    public boolean ehNovidade;
 
     public ProdutoDto(){}
 
@@ -19,5 +20,6 @@ public class ProdutoDto {
         this.dsResumo = produto.getDsResumo();
         this.vlPreco = produto.getVlPreco();
         this.dhCriacao = produto.getDhCriacao();
+        this.ehNovidade = produto.getEhNovidade();
     }
 }
