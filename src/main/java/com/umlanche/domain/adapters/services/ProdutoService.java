@@ -16,8 +16,7 @@ public class ProdutoService implements ProdutoServicePort {
 
     @Override
     public void createProduto(ProdutoDto dto) {
-        Produto produto = new Produto(dto);
-        this.produtosRepository.create(produto);
+        this.produtosRepository.create(dto.toProduto());
     }
 
     @Override
@@ -27,6 +26,6 @@ public class ProdutoService implements ProdutoServicePort {
 
     @Override
     public Produto getById(int idProduto) {
-        return null;
+        return this.produtosRepository.getById(idProduto);
     }
 }

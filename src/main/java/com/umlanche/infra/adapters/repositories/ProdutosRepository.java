@@ -1,27 +1,41 @@
 package com.umlanche.infra.adapters.repositories;
 
+import com.umlanche.domain.entities.Imagem;
 import com.umlanche.domain.entities.Produto;
+import com.umlanche.domain.ports.repositories.ImagensRepositoryPort;
 import com.umlanche.domain.ports.repositories.ProdutosRepositoryPort;
+import com.umlanche.infra.adapters.entities.ImagemEntity;
 import com.umlanche.infra.adapters.entities.ProdutoEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@Service
+@Component
 public class ProdutosRepository implements ProdutosRepositoryPort {
-    @Autowired
     private final SpringProdutosRepository springProdutosRepository;
+    private final ImagensRepositoryPort imagensRepositoryPort;
 
-    public ProdutosRepository(SpringProdutosRepository springProdutosRepository) {
+    public ProdutosRepository(SpringProdutosRepository springProdutosRepository, ImagensRepositoryPort imagensRepositoryPort) {
         this.springProdutosRepository = springProdutosRepository;
+        this.imagensRepositoryPort = imagensRepositoryPort;
     }
 
     @Override
+    @Transactional
     public void create(Produto produto) {
         ProdutoEntity produtoEntity = new ProdutoEntity(produto);
-        this.springProdutosRepository.save(produtoEntity);
+
+        ProdutoEntity entity = this.springProdutosRepository.save(produtoEntity);
+
+        List<Imagem> imagens = produto.getProdutoImagens();
+        if (imagens.isEmpty()) return;
+
+        this.springProdutosRepository.flush();
+
+        this.saveImages(entity.toProduto(), imagens);
     }
 
     @Override
@@ -30,7 +44,7 @@ public class ProdutosRepository implements ProdutosRepositoryPort {
 
         List<Produto> produtos = new ArrayList<>();
 
-        for(ProdutoEntity entity : entities) {
+        for (ProdutoEntity entity : entities) {
             produtos.add(entity.toProduto());
         }
 
@@ -39,6 +53,17 @@ public class ProdutosRepository implements ProdutosRepositoryPort {
 
     @Override
     public Produto getById(int idProduto) {
-        return null;
+        Optional<ProdutoEntity> entity =
+            this.springProdutosRepository.findById(idProduto);
+
+        return entity.map(ProdutoEntity::toProduto).orElse(null);
+    }
+
+    private void saveImages(Produto produto, List<Imagem> imagens) {
+        for (Imagem imagem : imagens) {
+            imagem.setProduto(produto);
+        }
+
+        this.imagensRepositoryPort.createMany(imagens);
     }
 }
