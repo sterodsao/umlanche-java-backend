@@ -30,7 +30,6 @@ public class ProdutoController {
 
             return new ResponseEntity<>(new CreatedResponse("Produto criado com sucesso!"), HttpStatus.CREATED);
         }catch(Exception e) {
-            System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -53,7 +52,7 @@ public class ProdutoController {
     }
 
     @GetMapping("{idProduto}")
-    @ResponseBody Optional<ProdutoDto> handleFindByid(@PathVariable int idProduto) {
+    @ResponseBody Optional<ProdutoDto> handleFindByid(@PathVariable("idProduto") int idProduto) {
         try{
             Produto produto = this.produtoServicePort.getById(idProduto);
 

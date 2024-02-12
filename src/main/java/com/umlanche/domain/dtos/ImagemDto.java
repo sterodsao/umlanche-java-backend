@@ -19,9 +19,4 @@ public class ImagemDto {
         this.nrImagem = imagem.getNrImagem();
         this.ehPrincipal = imagem.getEhPrincipal();
     }
-
-    public Imagem toImagem() {
-        return new Imagem(this.idImagem, this.dsUrl, this.dsResumo,
-            this.nrImagem, this.ehPrincipal);
-    }
 }

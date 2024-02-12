@@ -4,6 +4,7 @@ import com.umlanche.domain.dtos.ProdutoDto;
 import com.umlanche.domain.entities.Produto;
 import com.umlanche.domain.ports.repositories.ProdutosRepositoryPort;
 import com.umlanche.domain.ports.services.ProdutoServicePort;
+import com.umlanche.infra.adapters.repositories.mappers.ProdutoMapper;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ public class ProdutoService implements ProdutoServicePort {
 
     @Override
     public void createProduto(ProdutoDto dto) {
-        this.produtosRepository.create(dto.toProduto());
+        Produto produto = ProdutoMapper.toDomain(dto);
+        this.produtosRepository.create(produto);
     }
 
     @Override

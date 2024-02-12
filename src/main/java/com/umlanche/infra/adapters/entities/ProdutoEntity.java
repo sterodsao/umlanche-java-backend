@@ -1,8 +1,6 @@
 package com.umlanche.infra.adapters.entities;
 
-import com.umlanche.domain.entities.Categoria;
 import com.umlanche.domain.entities.Imagem;
-import com.umlanche.domain.entities.Produto;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -30,36 +28,36 @@ public class ProdutoEntity {
     public ProdutoEntity() {
     }
 
-    public ProdutoEntity(Produto produto) {
-        this.idProduto = produto.getIdProduto();
-        this.dsProduto = produto.getDsProduto();
-        this.dsResumo = produto.getDsResumo();
-        this.vlPreco = produto.getVlPreco();
-        this.dhCriacao = produto.getDhCriacao();
-
-        Categoria categoriaProduto = produto.getCategoriaProduto();
-        CategoriaEntity categoriaEntity =
-            new CategoriaEntity(categoriaProduto.getIdCategoria(),
-                categoriaProduto.getDsCategoria());
-
-        this.categoriaProduto = categoriaEntity;
-        this.produtoImagens = new ArrayList<>();
+    public ProdutoEntity(int idProduto, String dsProduto, String dsResumo, double vlPreco, Date dhCriacao, List<ImagemEntity> produtoImagens, CategoriaEntity produtoCategoria) {
+        this.idProduto = idProduto;
+        this.dsProduto = dsProduto;
+        this.dsResumo = dsResumo;
+        this.vlPreco = vlPreco;
+        this.dhCriacao = dhCriacao;
+        this.produtoImagens = produtoImagens;
+        this.categoriaProduto = produtoCategoria;
     }
 
-    public Produto toProduto() {
-        List<ImagemEntity> imagensEntity = this.produtoImagens;
-        List<Imagem> imagens = new ArrayList<>();
-
-        for(ImagemEntity entity : imagensEntity) {
-            imagens.add(entity.toImagem());
-        }
-
-        return new Produto(this.idProduto, this.dsProduto, this.dsResumo,
-            this.vlPreco, this.dhCriacao,
-            new Categoria(this.categoriaProduto.getIdCategoria(),
-                this.categoriaProduto.getDsCategoria()),
-            imagens
-        );
+    public int getIdProduto() {
+        return this.idProduto;
+    }
+    public String getDsProduto() {
+        return this.dsProduto;
+    }
+    public String getDsResumo() {
+        return this.dsResumo;
+    }
+    public double getVlPreco() {
+        return this.vlPreco;
+    }
+    public Date getDhCriacao() {
+        return this.dhCriacao;
+    }
+    public CategoriaEntity getCategoriaProduto() {
+        return this.categoriaProduto;
+    }
+    public List<ImagemEntity> getProdutoImagens() {
+        return this.produtoImagens;
     }
 
     public void setProdutoImagens(List<Imagem> imagens) {

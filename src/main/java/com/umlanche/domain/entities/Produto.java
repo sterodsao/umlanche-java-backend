@@ -1,13 +1,8 @@
 package com.umlanche.domain.entities;
 
-import com.umlanche.domain.dtos.ProdutoDto;
-
-import java.awt.*;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public class Produto {
     private int idProduto;
@@ -30,14 +25,6 @@ public class Produto {
         this.dhCriacao = dhCriacao != null ? dhCriacao : new Date();
         this.categoriaProduto = categoriaProduto;
         this.produtoImagens = produtoImagens;
-    }
-
-    public Produto(ProdutoDto dto) {
-        this.idProduto = dto.idProduto;
-        this.dsProduto = dto.dsProduto;
-        this.dsResumo = dto.dsResumo;
-        this.vlPreco = dto.vlPreco;
-        this.dhCriacao = dto.dhCriacao != null ? dto.dhCriacao : new Date();
     }
 
     public int getIdProduto() {
@@ -71,7 +58,6 @@ public class Produto {
     public void setProdutoImagens(List<Imagem> imagens) {
         this.produtoImagens = imagens;
     }
-
 
     public boolean getEhNovidade() {
         Date today = new Date();

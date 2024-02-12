@@ -4,8 +4,9 @@ import com.umlanche.domain.entities.Imagem;
 import com.umlanche.domain.entities.Produto;
 import com.umlanche.domain.ports.repositories.ImagensRepositoryPort;
 import com.umlanche.domain.ports.repositories.ProdutosRepositoryPort;
-import com.umlanche.infra.adapters.entities.ImagemEntity;
 import com.umlanche.infra.adapters.entities.ProdutoEntity;
+import com.umlanche.infra.adapters.repositories.mappers.ProdutoMapper;
+
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class ProdutosRepository implements ProdutosRepositoryPort {
     @Override
     @Transactional
     public void create(Produto produto) {
-        ProdutoEntity produtoEntity = new ProdutoEntity(produto);
+        ProdutoEntity produtoEntity = ProdutoMapper.toDatabase(produto);
 
         ProdutoEntity entity = this.springProdutosRepository.save(produtoEntity);
 
@@ -35,7 +36,7 @@ public class ProdutosRepository implements ProdutosRepositoryPort {
 
         this.springProdutosRepository.flush();
 
-        this.saveImages(entity.toProduto(), imagens);
+        this.saveImages(ProdutoMapper.toDomain(entity), imagens);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ProdutosRepository implements ProdutosRepositoryPort {
         List<Produto> produtos = new ArrayList<>();
 
         for (ProdutoEntity entity : entities) {
-            produtos.add(entity.toProduto());
+            produtos.add(ProdutoMapper.toDomain(entity));
         }
 
         return produtos;
@@ -56,7 +57,7 @@ public class ProdutosRepository implements ProdutosRepositoryPort {
         Optional<ProdutoEntity> entity =
             this.springProdutosRepository.findById(idProduto);
 
-        return entity.map(ProdutoEntity::toProduto).orElse(null);
+        return entity.map(ProdutoMapper::toDomain).orElse(null);
     }
 
     private void saveImages(Produto produto, List<Imagem> imagens) {

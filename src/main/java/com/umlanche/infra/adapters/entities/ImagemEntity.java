@@ -1,6 +1,8 @@
 package com.umlanche.infra.adapters.entities;
 
 import com.umlanche.domain.entities.Imagem;
+import com.umlanche.infra.adapters.repositories.mappers.ProdutoMapper;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -35,7 +37,23 @@ public class ImagemEntity {
         this.dsResumo = imagem.getDsResumo();
         this.nrImagem = imagem.getNrImagem();
         this.ehPrincipal = imagem.getEhPrincipal();
-        this.produto = new ProdutoEntity(imagem.getProduto());
+        this.produto = ProdutoMapper.toDatabase(imagem.getProduto());
+    }
+
+    public int getIdImagem() {
+        return this.idImagem;
+    }
+    public String getDsUrl() {
+        return this.dsUrl;
+    }
+    public String getDsResumo() {
+        return this.dsResumo;
+    }
+    public int getNrImagem() {
+        return this.nrImagem;
+    }
+    public boolean getEhPrincipal() {
+        return this.ehPrincipal;
     }
 
     public Imagem toImagem() {

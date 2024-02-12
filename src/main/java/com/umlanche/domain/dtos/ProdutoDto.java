@@ -43,22 +43,4 @@ public class ProdutoDto {
 
         this.produtoImagens = imagensDto;
     }
-
-    public Produto toProduto() {
-        List<ImagemDto> imagensDto = this.produtoImagens;
-        List<Imagem> imagens = new ArrayList<>();
-
-        for(ImagemDto dto : imagensDto) {
-            imagens.add(dto.toImagem());
-        }
-        return new Produto(
-            this.idProduto,
-            this.dsProduto,
-            this.dsResumo,
-            this.vlPreco,
-            this.dhCriacao,
-            this.categoriaProduto.toCategoria(),
-            imagens
-        );
-    }
 }
